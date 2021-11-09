@@ -31,16 +31,13 @@ jobs:
       run: nuget pack ./Ion.Net/Ion.Net.csproj -Build
 
     - name: Copy nuget artifacts
-      run: mv *.nupkg `pwd`/artifacts
+      run: mv *.nupkg ./artifacts
 
     - name: Set GIT_COMMIT
       run: echo "GIT_COMMIT=$(echo $GITHUB_SHA | cut -c 1-7)" >> $GITHUB_ENV
-
-    - name: Set artifacts path
-      run: echo "ARTIFACTS=`pwd`/artifacts" >> $GITHUB_ENV
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
         name: Ion.Net-${{ env.GIT_COMMIT }}
-        path: ${{ env.ARTIFACTS }}
+        path: ./artifacts
