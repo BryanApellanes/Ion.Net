@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Ion.Net
 {
-    public static class JsonExtensions
+    internal static class JsonExtensions
     {
         public static bool TryFromJson<T>(this string json, out T instance)
         {

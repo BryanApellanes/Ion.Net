@@ -30,7 +30,7 @@ namespace Ion.Net
 
         public static bool IsJsonArray(this string jsonArray, out JArray jArray)
         {
-            return IsJsonArray(jsonArray, out jArray, out Exception ignore);
+            return IsJsonArray(jsonArray, out jArray, out _);
         }
 
         public static bool IsJsonArray(this string jsonArray, out JArray jArray, out Exception exception)

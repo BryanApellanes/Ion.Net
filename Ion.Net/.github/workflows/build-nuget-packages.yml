@@ -1,0 +1,46 @@
+name: Build Ion.Net nuget package
+
+on: [push]
+
+jobs:
+  build-nuget-packages:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Create artifacts directory
+      run: mkdir -p ./artifacts
+
+    - name: Setup .NET Core SDK 5.0.x
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.0.x'
+
+    - name: Nuget restore
+      run: |
+        nuget restore ./Ion.Net.csproj &&
+        nuget restore ./Ion.Net.Tests/Ion.Net.Tests.csproj
+
+    - name: Run Unit Tests
+      working-directory: ./Ion.Net.Tests
+      run: dotnet test
+
+    - name: Build nuget package
+      run: nuget pack ./Ion.Net.csproj -Build
+
+    - name: Copy nuget artifacts
+      run: mv *.nupkg `pwd`/artifacts
+
+    - name: Set GIT_COMMIT
+      run: echo "GIT_COMMIT=$(echo $GITHUB_SHA | cut -c 1-7)" >> $GITHUB_ENV
+
+    - name: Set artifacts path
+      run: echo "ARTIFACTS=`pwd`/artifacts" >> $GITHUB_ENV
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: Ion.Net-${{ env.GIT_COMMIT }}
+        path: ${{ env.ARTIFACTS }}
