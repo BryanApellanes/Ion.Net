@@ -2,14 +2,18 @@
 
 namespace Ion.Net
 {
-    // https://ionspec.org/#form-field-option-members
-
+    /// <summary>
+    /// Represents an ion form field option, see // https://ionspec.org/#form-field-option-members.
+    /// </summary>
     public class IonFormFieldOption : IonObject
     {
 
         static HashSet<string> _formFieldOptionMembers;
         static object _formFieldOptionMembersLock = new object();
 
+        /// <summary>
+        /// Gets the valid form field option members.
+        /// </summary>
         public static HashSet<string> FormFieldOptionMembers
         {
             get

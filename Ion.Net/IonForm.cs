@@ -4,27 +4,42 @@ using System.Collections.Generic;
 
 namespace Ion.Net
 {
-    // https://ionspec.org/#forms
-
+    /// <summary>
+    /// Represents an ion form, see https://ionspec.org/#forms.
+    /// </summary>
     public class IonForm : IonCollection
     {
+        /// <summary>
+        /// Instantiate a new IonForm.
+        /// </summary>
         public IonForm() : base()
         {
             this.Value = new List<IonFormField>();
         }
 
+        /// <summary>
+        /// Instantiate a new IonForm with the specified values.
+        /// </summary>
+        /// <param name="jTokens"></param>
         public IonForm(List<JToken> jTokens) : base(jTokens) 
         {
             this.Value = new List<IonFormField>();
         }
 
+        /// <summary>
+        /// Gets or sets the value.
+        /// </summary>
         public new List<IonFormField> Value
         {
             get;
             set;
         }
 
-
+        /// <summary>
+        /// Reads the specified json string as an IonForm.
+        /// </summary>
+        /// <param name="json">The json string.</param>
+        /// <returns>IonForm</returns>
         public new static IonForm Read(string json)
         {
             Dictionary<string, object> dictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
@@ -57,25 +72,41 @@ namespace Ion.Net
             return ionForm;
         }
 
-        private static HashSet<string> formRelValues = new HashSet<string>(new[] { "form", "edit-form", "create-form", "query-form" });
+        private static readonly HashSet<string> formRelValues = new HashSet<string>(new[] { "form", "edit-form", "create-form", "query-form" });
 
+        /// <summary>
+        /// Determines if the specified form value is valid.
+        /// </summary>
+        /// <param name="formValueToCheck">The form value.</param>
+        /// <returns>bool.</returns>
         public static bool IsValid(object formValueToCheck)
         {
             return IsValid(formValueToCheck, out IonObject ignore);
         }
 
-        public static bool IsValid(object formValueToCheck, out IonObject ionValueObject)
+        /// <summary>
+        /// Determines if the specified form value is valid.
+        /// </summary>
+        /// <param name="formValueToCheck">The form value.</param>
+        /// <param name="ionObject">The value as an IonObject.</param>
+        /// <returns>bool.</returns>
+        public static bool IsValid(object formValueToCheck, out IonObject ionObject)
         {
             string json = formValueToCheck?.ToJson();
             bool isValid =  Validate(json).Success;
-            ionValueObject = null;
+            ionObject = null;
             if (isValid)
             {
-                ionValueObject = IonObject.ReadObject(json);
+                ionObject = ReadObject(json);
             }
             return isValid;
         }
 
+        /// <summary>
+        /// Returns an `IonFormValidationResult` that indicates whether the specified member is a valid form.
+        /// </summary>
+        /// <param name="ionMember">The ion membmer.</param>
+        /// <returns>`IonFormValidationResult`.</returns>
         public static IonFormValidationResult Validate(IonMember ionMember)
         {
             /**
@@ -124,7 +155,11 @@ Ion parsers MUST identify any JSON object as an Ion Form if the object matches t
             };
         }
 
-
+        /// <summary>
+        /// Returns an `IonFormValidationResult` that indicates whether the specified json string is a valid form.
+        /// </summary>
+        /// <param name="json">The json string</param>
+        /// <returns>`IonFormValidationResults`.</returns>
         public static IonFormValidationResult Validate(string json)
         {
             /**

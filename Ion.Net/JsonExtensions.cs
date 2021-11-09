@@ -27,13 +27,6 @@ namespace Ion.Net
             }
         }
 
-        /// <summary>
-        /// Deserialize the current string as the specified
-        /// generic type T.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="json"></param>
-        /// <returns></returns>
         public static T FromJson<T>(this string json)
         {
             return JsonConvert.DeserializeObject<T>(json);

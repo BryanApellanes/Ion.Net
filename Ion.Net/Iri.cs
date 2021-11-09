@@ -22,6 +22,13 @@ namespace Ion.Net
         {
         }
 
+        /// <summary>
+        /// Returns a value indicating if the specified string is a valid `Iri`.
+        /// </summary>
+        /// <param name="url">The url.</param>
+        /// <param name="iri">The parsed `Iri`.</param>
+        /// <param name="exceptionHandler">Action that receives the exception when a failure occurs.</param>
+        /// <returns>`bool`.</returns>
         public static bool IsIri(string url, out Iri iri, Action<Exception> exceptionHandler = null)
         {
             iri = null;

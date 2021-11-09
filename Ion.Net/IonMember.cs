@@ -8,26 +8,46 @@ using YamlDotNet.Serialization;
 
 namespace Ion.Net
 {
-    public class IonMember<T> : IonMember
+    /// <summary>
+    /// Represents an Ion member whose value is of generic type `TValue`.
+    /// </summary>
+    /// <typeparam name="TValue"></typeparam>
+    public class IonMember<TValue> : IonMember
     {
-        public static implicit operator T(IonMember<T> ionMember)
+        public static implicit operator TValue(IonMember<TValue> ionMember)
         {
             return ionMember.Value;
         }
 
-        public static explicit operator IonMember<T>(T value)
+        public static explicit operator IonMember<TValue>(TValue value)
         {
-            return new IonMember<T>(value);
+            return new IonMember<TValue>(value);
         }
         
+        /// <summary>
+        /// Create a new instance of `IonMember`.
+        /// </summary>
         public IonMember() { }
-        public IonMember(T value)
+
+        /// <summary>
+        /// Create a new instance of `IonMember` with the specified value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        public IonMember(TValue value)
         {
             Value = value;
         }
 
-        public new T Value { get; set; }
+        /// <summary>
+        /// Gets or sets the value.
+        /// </summary>
+        public new TValue Value { get; set; }
 
+        /// <summary>
+        /// Returns a value indicating if the current instance is equivalent to the specified value.
+        /// </summary>
+        /// <param name="obj">The value to compare to.</param>
+        /// <returns>`bool`.</returns>
         public override bool Equals(object obj)
         {
             if (obj == null && Value == null)
@@ -49,6 +69,10 @@ namespace Ion.Net
             return Value.Equals(obj);
         }
 
+        /// <summary>
+        /// Get hash code uniquely identifying the current instance at runtime.
+        /// </summary>
+        /// <returns></returns>
         public override int GetHashCode()
         {
             if (Value == null)
@@ -59,12 +83,14 @@ namespace Ion.Net
         }
     }
 
+    /// <summary>
+    /// Represents an Ion member.
+    /// </summary>
     public class IonMember 
     {
-        static IonMember()
-        {
-        }
-
+        /// <summary>
+        /// Creates a new instance of `IonMember`.
+        /// </summary>
         public IonMember()
         {
         }
@@ -94,6 +120,10 @@ namespace Ion.Net
             return new IonMember { Name = "value", Value = value, SourceValue = value };
         }
 
+        /// <summary>
+        /// Create a new instance of `IonMember` with the specified value.
+        /// </summary>
+        /// <param name="value">The value.</param>
         public IonMember(object value)
         {
             this.Name = "value";
@@ -101,6 +131,11 @@ namespace Ion.Net
             this.SourceValue = value;
         }
 
+        /// <summary>
+        /// Create a new instance of `IonMember` with the specified name and value.
+        /// </summary>
+        /// <param name="name">The member name.</param>
+        /// <param name="value">The value.</param>
         public IonMember(string name, object value)
         {
             this.Name = name;
@@ -108,6 +143,12 @@ namespace Ion.Net
             this.SourceValue = value;
         }
 
+        /// <summary>
+        /// Returns a json string representation of the current Ion member.
+        /// </summary>
+        /// <param name="pretty">A value indicating whether to use indentation.</param>
+        /// <param name="nullValueHandling">Specified null value handling options for the JsonSerializer.</param>
+        /// <returns></returns>
         public string ToJson(bool pretty = false, NullValueHandling nullValueHandling = NullValueHandling.Ignore)
         {
             if (pretty)
@@ -117,16 +158,21 @@ namespace Ion.Net
             return $"{{\"{Name}\": {Value?.ToJson(pretty, nullValueHandling)}}}";
         }
         
+        /// <summary>
+        /// Returns the value as the specified generic type `T`.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public T ValueAs<T>() where T : class
         {
-            if(Value == null)
+            if (Value == null)
             {
                 return default;
             }
             T typedValue = Value as T;
-            if(typedValue == null)
+            if (typedValue == null)
             {
-                if(Value is IJsonable jsonable)
+                if (Value is IJsonable jsonable)
                 {
                     return JsonConvert.DeserializeObject<T>(jsonable.ToJson());
                 }
@@ -135,30 +181,45 @@ namespace Ion.Net
             return typedValue;
         }
 
+        /// <summary>
+        /// Returns the value as an `IonObject`.
+        /// </summary>
+        /// <returns>`IonObject`.</returns>
         public IonObject ValueObject()
         {
-            if(Value == null)
+            if (Value == null)
             {
                 return default;
             }
 
-            if(Value is IJsonable jsonable)
+            if (Value is IJsonable jsonable)
             {
                 return IonObject.ReadObject(jsonable.ToJson());
             }
 
             return IonObject.ReadObject(JsonConvert.SerializeObject(Value));
-
         }
 
+        /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// Gets or sets the value.
+        /// </summary>
         public virtual object Value { get; set; }
 
+        /// <summary>
+        /// Gets or sets the source value.
+        /// </summary>
         [YamlIgnore]
         [JsonIgnore]
         public object SourceValue { get; set; }
 
+        /// <summary>
+        /// Gets the parent.
+        /// </summary>
         [YamlIgnore]
         [JsonIgnore]
         public IonObject Parent
@@ -184,6 +245,10 @@ namespace Ion.Net
             return namedMember.Equals(this);
         }
 
+        /// <summary>
+        /// Returns a string representation of the current member.
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return $"\"{Name}\": {Value?.ToJson()}";
@@ -217,16 +282,21 @@ namespace Ion.Net
             }
         }
 
+        /// <summary>
+        /// Returns a list of members that represent the specified value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>`IEnumerable{IonMember}`.</returns>
         public static IEnumerable<IonMember> ListFromObject(object value)
         {
-            if(value is string stringValue)
+            if (value is string stringValue)
             {
                 if (stringValue.IsJson())
                 {
                     return ListFromJson(stringValue);
                 }
             }
-            if(value is IonMember ionMemberValue)
+            if (value is IonMember ionMemberValue)
             {
                 if (ionMemberValue.Value is JObject jobjectValue)
                 {
@@ -236,6 +306,11 @@ namespace Ion.Net
             return ListFromJson(JsonConvert.SerializeObject(value));
         }
 
+        /// <summary>
+        /// Returns a list of members that represent the specified json string.
+        /// </summary>
+        /// <param name="json">The json string.</param>
+        /// <returns>`IEnumerable{IonMember}`.</returns>
         public static IEnumerable<IonMember> ListFromJson(string json)
         {
             Dictionary<string, object> members = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
@@ -245,6 +320,11 @@ namespace Ion.Net
             }
         }
 
+        /// <summary>
+        /// Returns a list of members that represent the specified dictionary.
+        /// </summary>
+        /// <param name="members">The members.</param>
+        /// <returns>`IEnumerable{IonMember}`.</returns>
         public static IEnumerable<IonMember> ListFromDictionary(Dictionary<string, object> members)
         {
             foreach(string key in members.Keys)
@@ -272,27 +352,36 @@ namespace Ion.Net
             return results;
         }
 
-        public override bool Equals(object obj)
+        /// <summary>
+        /// Returns a value indicating if the current instance is equivalent to the specified value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>`bool`.</returns>
+        public override bool Equals(object value)
         {
-            if (obj == null && Value == null)
+            if (value == null && Value == null)
             {
                 return true;
             }
-            if(obj == null && Value != null)
+            if(value == null && Value != null)
             {
                 return false;
             }
-            if(obj != null && Value == null)
+            if(value != null && Value == null)
             {
                 return false;
             }
-            if(obj is IonMember ionMember)
+            if(value is IonMember ionMember)
             {
                 return Value.Equals(ionMember.Value) && Name.Equals(ionMember.Name);
             }
-            return Value.Equals(obj);
+            return Value.Equals(value);
         }
 
+        /// <summary>
+        /// Returns a value uniquely identifying this instance at runtime.
+        /// </summary>
+        /// <returns>`int`.</returns>
         public override int GetHashCode()
         {
             if(Value == null)

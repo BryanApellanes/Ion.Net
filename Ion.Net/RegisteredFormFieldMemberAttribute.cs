@@ -2,6 +2,9 @@
 
 namespace Ion.Net
 {
+    /// <summary>
+    /// An attribute used to register custom form field members.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public class RegisteredFormFieldMemberAttribute: Attribute
     {
@@ -10,6 +13,9 @@ namespace Ion.Net
             this.MemberName = memberName;
         }
 
+        /// <summary>
+        /// Gets or sets the member name.
+        /// </summary>
         public string MemberName { get; set; }
     }
 }

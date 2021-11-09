@@ -2,9 +2,15 @@
 
 namespace Ion.Net
 {
+    /// <summary>
+    /// Represents an `IonFormFieldMember` with the member name of `eform`.
+    /// </summary>
     [RegisteredFormFieldMember("eform")]
     public class EFormFormFieldMember : IonFormFieldMember
     {
+        /// <summary>
+        /// Construct an instance of the `EFormFormFieldMember` class.
+        /// </summary>
         public EFormFormFieldMember()
         {
             this.Name = "eform";
@@ -13,11 +19,20 @@ namespace Ion.Net
             this.FullName = "element form";
         }
 
+        /// <summary>
+        /// Construct an instance of the `EFormFormFieldMember` class with the specified value.
+        /// </summary>
+        /// <param name="value"></param>
         public EFormFormFieldMember(object value) : this()
         {
             this.Value = value;
         }
 
+        /// <summary>
+        /// Get an `EFormFormFieldMember` with the specified value.  Performs validation of the specified value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>EFormFormFieldMember</returns>
         public static EFormFormFieldMember FromValue(string value)
         {
             EFormFormFieldMember result = null;
@@ -32,6 +47,10 @@ namespace Ion.Net
             return result;
         }
 
+        /// <summary>
+        /// Determines if the `Value` property is valid.
+        /// </summary>
+        /// <returns>`true` if the value is valid,</returns>
         public override bool IsValid()
         {
             if(Value == null)
@@ -50,6 +69,11 @@ namespace Ion.Net
             return hasRequiredMembers && IsForm();
         }
 
+        /// <summary>
+        /// Determines if the specified `JObject` has required members `type` equal to "array" or "set" and `etype` equal to "object". 
+        /// </summary>
+        /// <param name="jObject">The JObject</param>
+        /// <returns>`true` if required members exist.</returns>
         protected bool HasRequiredMembers(JObject jObject)
         {
             string typeValue = (string)jObject["type"];
@@ -69,6 +93,10 @@ namespace Ion.Net
             return true;
         }
 
+        /// <summary>
+        /// Determines if the Value is a form.
+        /// </summary>
+        /// <returns>`true` if the Value is a form.</returns>
         protected bool IsForm()
         {
             bool isForm;

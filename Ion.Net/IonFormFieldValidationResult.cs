@@ -5,14 +5,36 @@ using System.Linq;
 
 namespace Ion.Net
 {
+    /// <summary>
+    /// Represents result of form field validation.
+    /// </summary>
     public class IonFormFieldValidationResult
     {
-        public bool ValueIsArray { get; set; }
+        /// <summary>
+        /// Gets a boolean indicating if the value is an array.
+        /// </summary>
+        public bool ValueIsArray { get; private set; }
+
+        /// <summary>
+        /// Gets a boolean indicating if the value has only form field members.
+        /// </summary>
         public bool ValueHasOnlyFormFields { get; private set; }
+
+        /// <summary>
+        /// Gets a boolean indicating if the value has form field members with unique names.
+        /// </summary>
         public bool ValueHasFormFieldsWithUniqueNames { get; private set; }
 
+        /// <summary>
+        /// Gets a dictionary containing form fields with duplicate names.
+        /// </summary>
         public Dictionary<string, List<IonFormField>> FormFieldsWithDuplicateNames { get; private set; }
 
+        /// <summary>
+        /// Returns an IonFormFieldValidationResult which represents the result of validating the specified member.
+        /// </summary>
+        /// <param name="ionMember">The member.</param>
+        /// <returns>`IonFormFieldValidationResult`.</returns>
         public static IonFormFieldValidationResult ValidateFormFields(IonMember ionMember)
         {
             if (ionMember == null)
@@ -47,6 +69,11 @@ namespace Ion.Net
             return new IonFormFieldValidationResult { ValueIsArray = false };
         }
 
+        /// <summary>
+        /// Returns an IonFormFieldValidationResult which represents the result of validating the specified member.
+        /// </summary>
+        /// <param name="jArrayValue">The form fields</param>
+        /// <returns>`IonFormFieldValidationResult`.</returns>
         public static IonFormFieldValidationResult ValidateFormFields(JArray jArrayValue)
         {
             bool valueHasOnlyFormFields = true;

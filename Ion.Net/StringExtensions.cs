@@ -68,11 +68,10 @@ namespace Ion.Net
         }
 
         /// <summary>
-        /// Returns true if the string equals "true", "t", "yes", "y" or "1" using a case
-        /// insensitive comparison
+        /// Returns true if the string equals "true", "t", "yes", "y" or "1" using a case insensitive comparison.
         /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
+        /// <param name="value">The value.</param>
+        /// <returns>bool.</returns>
         public static bool IsAffirmative(this string value)
         {
             if (string.IsNullOrEmpty(value))

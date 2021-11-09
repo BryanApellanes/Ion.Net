@@ -1,10 +1,16 @@
 ﻿namespace Ion.Net
 {
+    /// <summary>
+    /// A base 64 encoded byte array.
+    /// </summary>
     public class Base64UrlEncodedByteArray
     {
         public Base64UrlEncodedByteArray() { }
 
         string _value;
+        /// <summary>
+        /// Gets or sets the base 64 encoded value.
+        /// </summary>
         public string Value
         {
             get
@@ -19,6 +25,9 @@
         }
 
         byte[] _array;
+        /// <summary>
+        /// Gets or sets the byte array.
+        /// </summary>
         public byte[] Array
         {
             get

@@ -3,11 +3,13 @@ using System.Collections.Generic;
 
 namespace Ion.Net
 {
+    /// <summary>
+    /// Provides extensions to the `IEnumerable` class.
+    /// </summary>
     public static class IEnumerableExtensions
     {
         /// <summary>
-        /// Iterate over the current IEnumerable passing
-        /// each element to the specified action
+        /// Iterate over the specified IEnumerable passing each element to the specified action.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="arr"></param>

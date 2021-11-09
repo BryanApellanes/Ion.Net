@@ -6,8 +6,17 @@ using System.Reflection;
 
 namespace Ion.Net
 {
+    /// <summary>
+    /// Provides extensions relevant to the Ion specification.
+    /// </summary>
     public static class IonExtensions
     {
+        /// <summary>
+        /// Returns an instance of generic type `T` with properties set from the specified members.
+        /// </summary>
+        /// <typeparam name="T">The type.</typeparam>
+        /// <param name="ionMembers">The members.</param>
+        /// <returns>Instance of `T`.</returns>
         public static T ToInstance<T>(this IEnumerable<IonMember> ionMembers)
         {
             ConstructorInfo ctor = typeof(T).GetConstructor(Type.EmptyTypes);
@@ -23,22 +32,40 @@ namespace Ion.Net
             return instance;
         }
 
-        public static bool IsJsonArray(this string jsonArray)
+        /// <summary>
+        /// Returns a value indicating if the specified json string represents an array.
+        /// </summary>
+        /// <param name="json">The json string.</param>
+        /// <returns>bool.</returns>
+        public static bool IsJsonArray(this string json)
         {
-            return IsJsonArray(jsonArray, out JArray ignore);
+            return IsJsonArray(json, out _);
         }
 
-        public static bool IsJsonArray(this string jsonArray, out JArray jArray)
+        /// <summary>
+        /// Returns a value indicating if the specified json string represents an array.
+        /// </summary>
+        /// <param name="json">The json string.</param>
+        /// <param name="jArray">The `JArray` instance if the specified json represents an array.</param>
+        /// <returns>bool.</returns>
+        public static bool IsJsonArray(this string json, out JArray jArray)
         {
-            return IsJsonArray(jsonArray, out jArray, out _);
+            return IsJsonArray(json, out jArray, out _);
         }
 
-        public static bool IsJsonArray(this string jsonArray, out JArray jArray, out Exception exception)
+        /// <summary>
+        /// Returns a value indicating if the specified json string represents an array.
+        /// </summary>
+        /// <param name="json">The json string.</param>
+        /// <param name="jArray">The `JArray` instance if the specified json represents an array.</param>
+        /// <param name="exception">The exception that caused failure if the specified json does not represent an array.</param>
+        /// <returns>bool.</returns>
+        public static bool IsJsonArray(this string json, out JArray jArray, out Exception exception)
         {
             exception = null;
             try
             {
-                jArray = JArray.Parse(jsonArray);
+                jArray = JArray.Parse(json);
                 return true;
             }
             catch (Exception ex)
@@ -49,16 +76,34 @@ namespace Ion.Net
             }
         }
 
+        /// <summary>
+        /// Returns a value indicating if the specified json string is valid.
+        /// </summary>
+        /// <param name="json">The json string.</param>
+        /// <returns>bool.</returns>
         public static bool IsJson(this string json)
         {
-            return IsJson(json, out JObject ignore);
+            return IsJson(json, out _);
         }
 
+        /// <summary>
+        /// Returns a value indicating if the specified json string is valid.
+        /// </summary>
+        /// <param name="json">The json string.</param>
+        /// <param name="jObject">The parsed json.</param>
+        /// <returns>bool</returns>
         public static bool IsJson(this string json, out JObject jObject)
         {
-            return IsJson(json, out jObject, out Exception ignore);
+            return IsJson(json, out jObject, out _);
         }
 
+        /// <summary>
+        /// Returns a value indicating if the specified json string is valid.
+        /// </summary>
+        /// <param name="json">The json string.</param>
+        /// <param name="jObject">The parsed json.</param>
+        /// <param name="exception">The exception that caused failure if the specified json string is not valid.</param>
+        /// <returns>bool.</returns>
         public static bool IsJson(this string json, out JObject jObject, out Exception exception)
         {
             exception = null;

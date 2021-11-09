@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Ion.Net
 {
+    /// <summary>
+    /// Represents an Ion resource.
+    /// </summary>
     public interface IIonResource
     {
     }

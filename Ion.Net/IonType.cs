@@ -4,6 +4,9 @@ using YamlDotNet.Serialization;
 
 namespace Ion.Net
 {
+    /// <summary>
+    /// A base class for Ion types.
+    /// </summary>
     public abstract class IonType 
     {
         public IonType()
@@ -11,6 +14,9 @@ namespace Ion.Net
             TypeContextKind = TypeContextKind.TypeName;
         }
         
+        /// <summary>
+        /// Gets or sets the kind of the type context.
+        /// </summary>
         [YamlIgnore]
         [JsonIgnore]
         public TypeContextKind TypeContextKind
@@ -36,6 +42,12 @@ namespace Ion.Net
             }
         }
 
+        /// <summary>
+        /// Returns a json string representation of the current `IonObject`.
+        /// </summary>
+        /// <param name="pretty">A value indicating whether to use indentation.</param>
+        /// <param name="nullValueHandling">Specifies null handling options for the JsonSerializer.</param>
+        /// <returns>json string.</returns>
         public virtual string ToJson(bool pretty = false, NullValueHandling nullValueHandling = NullValueHandling.Ignore)
         {
             return JsonExtensions.ToJson(this, pretty, nullValueHandling);

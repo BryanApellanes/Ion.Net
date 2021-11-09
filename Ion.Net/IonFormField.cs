@@ -3,21 +3,39 @@ using System.Collections.Generic;
 
 namespace Ion.Net
 {
-    // https://ionspec.org/#form-fields
-
+    /// <summary>
+    /// Represents an ion form field, see https://ionspec.org/#form-fields.
+    /// </summary>
     public class IonFormField : IonObject
     {
+        /// <summary>
+        /// Instantiate a new IonFormField.
+        /// </summary>
         public IonFormField() : base() { }
+
+        /// <summary>
+        /// Instantiate a new IonFormField with the specified members.
+        /// </summary>
+        /// <param name="members">The members.</param>
         public IonFormField(List<IonMember> members) : base(members) 
         {
             this.SetEtype();
         }
 
+        /// <summary>
+        /// Instantiate a new IonFormField with the specified members.
+        /// </summary>
+        /// <param name="members">The members.</param>
         public IonFormField(params IonMember[] members) : base(members) 
         {
             this.SetEtype();
         }
 
+        /// <summary>
+        /// Instantiate a new IonFormField with the specified name and members.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="members">The members.</param>
         public IonFormField(string name, params IonMember[] members) : this(members)
         {
             this.Name = name;
@@ -47,27 +65,49 @@ namespace Ion.Net
             get => IonFormFieldMember.RegisteredNames;
         }
 
+        /// <summary>
+        /// Returns the `desc` member value.
+        /// </summary>
+        /// <returns>`string`.</returns>
         public string Desc()
         {
             return this["desc"]?.Value?.ToString();
         }
 
+        /// <summary>
+        /// Sets the `desc` member value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The current `IonFormField`.</returns>
         public IonFormField Desc(string value)
         {
             this["desc"].Value = value;
             return this;
         }
 
+        /// <summary>
+        /// Returns the `eform` member value.
+        /// </summary>
+        /// <returns>object.</returns>
         public object EForm()
         {
             return this["eform"].Value;
         }
 
+        /// <summary>
+        /// Returns the `enabled` member value.
+        /// </summary>
+        /// <returns>`bool`.</returns>
         public bool Enabled()
         {
             return (bool)this["enabled"].Value?.ToString()?.IsAffirmative();
         } 
 
+        /// <summary>
+        /// Sets the `enabled` member value to the specified value.
+        /// </summary>
+        /// <param name="enabled">The value.</param>
+        /// <returns>The current `IonFormField`.</returns>
         public IonFormField Enabled(bool enabled)
         {
             this["enabled"].Value = enabled;
@@ -79,8 +119,16 @@ namespace Ion.Net
             this["etype"] = this["etype"];
         }
 
+        /// <summary>
+        /// Gets or sets the Value.
+        /// </summary>
         public new IonFormFieldOption Value { get; set; }
 
+        /// <summary>
+        /// Gets or sets the member with the specified name.
+        /// </summary>
+        /// <param name="memberName">The member name.</param>
+        /// <returns>`IonMember`.</returns>
         public override IonMember this[string memberName] 
         {
             get
@@ -88,7 +136,7 @@ namespace Ion.Net
                 IonMember baseMember = base[memberName];
                 if ("etype".Equals(memberName))
                 {
-                    if(baseMember.Value == null)
+                    if (baseMember.Value == null)
                     {
                         if (baseMember.Parent["eform"]?.Value != null)
                         {
@@ -123,6 +171,11 @@ namespace Ion.Net
             }
         }
 
+        /// <summary>
+        /// Reads the specifie json string as an `IonFormField`.
+        /// </summary>
+        /// <param name="json">The json string.</param>
+        /// <returns>`IonFormField`.</returns>
         public static IonFormField Read(string json)
         {
             Dictionary<string, object> dictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
@@ -134,11 +187,22 @@ namespace Ion.Net
             return new IonFormField(members) { SourceJson = json };
         }
 
+        /// <summary>
+        /// Returns a value indicating if the specified json is a valid form field.
+        /// </summary>
+        /// <param name="json">The json string.</param>
+        /// <returns>`bool`.</returns>
         public static bool IsValid(string json)
         {
             return IsValid(json, out IonFormField ignore);
         }
 
+        /// <summary>
+        /// Returns a value indicating if the specified json string is a valid `IonFormField`.
+        /// </summary>
+        /// <param name="json">The json string.</param>
+        /// <param name="formField">The parsed `IonFormField`.</param>
+        /// <returns>`bool`.</returns>
         public static bool IsValid(string json, out IonFormField formField)
         {
             /**

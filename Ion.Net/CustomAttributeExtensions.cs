@@ -3,6 +3,9 @@ using System.Reflection;
 
 namespace Ion.Net
 {
+    /// <summary>
+    /// Provides extension methods to read custom attributes.
+    /// </summary>
     public static class CustomAttributeExtensions
     {
 
