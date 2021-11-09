@@ -20,15 +20,15 @@ jobs:
 
     - name: Nuget restore
       run: |
-        nuget restore ./Ion.Net.csproj &&
-        nuget restore ./Ion.Net.Tests/Ion.Net.Tests.csproj
+        nuget restore ./Ion.Net/Ion.Net.csproj &&
+        nuget restore ./Ion.Net.Tests/Ion.Net.Tests/Ion.Net.Tests.csproj
 
     - name: Run Unit Tests
       working-directory: ./Ion.Net.Tests
       run: dotnet test
 
     - name: Build nuget package
-      run: nuget pack ./Ion.Net.csproj -Build
+      run: nuget pack ./Ion.Net/Ion.Net.csproj -Build
 
     - name: Copy nuget artifacts
       run: mv *.nupkg `pwd`/artifacts
