@@ -21,7 +21,7 @@ jobs:
     - name: Nuget restore
       run: |
         nuget restore ./Ion.Net/Ion.Net.csproj &&
-        nuget restore ./Ion.Net.Tests/Ion.Net.Tests/Ion.Net.Tests.csproj
+        nuget restore ./Ion.Net.Tests/Ion.Net.Tests.csproj
 
     - name: Run Unit Tests
       working-directory: ./Ion.Net.Tests
