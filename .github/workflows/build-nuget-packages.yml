@@ -33,11 +33,8 @@ jobs:
     - name: Copy nuget artifacts
       run: mv *.nupkg ./artifacts
 
-    - name: Set GIT_COMMIT
-      run: echo "GIT_COMMIT=$(echo $GITHUB_SHA | cut -c 1-7)" >> $GITHUB_ENV
-
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: Ion.Net-${{ env.GIT_COMMIT }}
+        name: Ion.Net
         path: ./artifacts
