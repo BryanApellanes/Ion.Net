@@ -3,7 +3,7 @@ name: Build Ion.Net nuget package
 on: [push]
 
 jobs:
-  build-nuget-packages:
+  build-nuget-package:
 
     runs-on: windows-latest
 
